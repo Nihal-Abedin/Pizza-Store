@@ -1,35 +1,56 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+import Home from './components/Home.jsx';
+import Cart from './features/cart/Cart.jsx';
+import Menu, { loader as menuLoader } from './features/menu/Menu.jsx';
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
+import CreateOrder, {action as createOrder} from './features/order/CreateOrder.jsx';
+import Order, { loader as orderloader } from './features/order/Order.jsx';
+import MainLayout from './components/mainLayout/MainLayout.jsx';
+import Error from './components/Error.jsx';
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+const router = createBrowserRouter([
+  {
+    element: <MainLayout />,
+    errorElement: <Error />,
+    children: [
+      {
+        path: "/",
+        element: <Home />,
+        children: []
+      },
+      {
+        path: "/menu",
+        element: <Menu />,
+        loader: menuLoader,
+        errorElement: <Error />,
 
-export default App
+      }
+      ,
+      {
+        path: "/cart",
+        element: <Cart />
+      },
+      {
+        path: "/order/new",
+        element: <CreateOrder />,
+        action:createOrder
+      },
+      {
+        path: "/order/:orderId",
+        element: <Order />,
+        loader: orderloader,
+        errorElement: <Error />,
+
+      }
+    ]
+  }
+
+]);
+
+const App = () => {
+  return <RouterProvider router={router} />
+};
+export default App;
