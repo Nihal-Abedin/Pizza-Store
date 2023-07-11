@@ -4,7 +4,7 @@ const Input = ({
   onChange,
   name,
   required,
-  value,
+  // value,
   defaultValue,
   disabled,
   className,
@@ -19,7 +19,7 @@ const Input = ({
       name={name}
       defaultValue={defaultValue}
       required={required}
-      value={value}
+      // value={value || defaultValue}
       disabled={disabled}
     />
   );
